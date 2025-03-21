@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(GUILIB_NAME guilib)
+set(GUILIB_LIBRARY ${GUILIB_NAME})
 
 project(${GUILIB_NAME})
 
@@ -33,7 +34,7 @@ add_library(${GUILIB_RESOURCES_LIBRARY}
     ${GUILIB_SOURCE_DIR}/mesh.cpp
 )
 
-add_library(${GUILIB_NAME}
+add_library(${GUILIB_LIBRARY}
     ${GUILIB_SOURCE_DIR}/common.cpp
 )
 
@@ -72,12 +73,12 @@ target_link_libraries(${GUILIB_WIDGETS_LIBRARY}
     ${GUILIB_RESOURCES_LIBRARY}
 )
 
-target_link_libraries(${GUILIB_NAME}
+target_link_libraries(${GUILIB_LIBRARY}
     ${GUILIB_WIDGETS_LIBRARY}
     ${GUILIB_RESOURCES_LIBRARY}
 )
 
-target_compile_options(${GUILIB_NAME} PUBLIC
+target_compile_options(${GUILIB_LIBRARY} PUBLIC
     -g #-O2
 )
 
