@@ -7,13 +7,13 @@ project(${GUILIB_NAME})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(GUILIB_FILES shaders assets)
+set(GUILIB_FILES assets)
 set(GUILIB_SOURCE_DIR src/guilib)
 set(GUILIB_INCLUDE_DIR src/guilib)
 set(GUILIB_WIDGETS_LIBRARY widgets)
 set(GUILIB_RESOURCES_LIBRARY resources)
 
-set(THIRDPARTY_INCLUDE_DIR thirdparty)
+set(THIRDPARTY_INCLUDE_DIR src/thirdparty)
 
 add_subdirectory(${THIRDPARTY_INCLUDE_DIR}/tinyobjloader)
 
@@ -33,7 +33,7 @@ add_library(${GUILIB_RESOURCES_LIBRARY}
     ${GUILIB_SOURCE_DIR}/mesh.cpp
 )
 
-add_executable(${GUILIB_NAME}
+add_library(${GUILIB_NAME}
     ${GUILIB_SOURCE_DIR}/common.cpp
 )
 
@@ -43,6 +43,8 @@ find_path(EGL_INCLUDE_DIR EGL/egl.h)
 find_path(GLFW_INCLUDE_DIR GLFW/glfw3.h)
 find_path(GLM_INCLUDE_DIR glm/glm.hpp)
 find_path(tinyobjloader_INCLUDE_DIR tiny_obj_loader.h)
+find_path(stb_image_INCLUDE_DIR stb_image.h HINTS ${THIRDPARTY_INCLUDE_DIR}/stb_image)
+find_path(stl_reader_INCLUDE_DIR stl_reader.h HINTS ${THIRDPARTY_INCLUDE_DIR}/stl_reader)
 
 find_library(GL_LIBRARY GL)
 find_library(GLFW_LIBRARY glfw)
@@ -55,7 +57,9 @@ target_include_directories(${GUILIB_RESOURCES_LIBRARY} PUBLIC
     ${EGL_INCLUDE_DIR}
     ${GLFW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
-    ${THIRDPARTY_INCLUDE_DIR}
+    ${tinyobjloader_INCLUDE_DIR}
+    ${stb_image_INCLUDE_DIR}
+    ${stl_reader_INCLUDE_DIR}
 )
 
 target_link_libraries(${GUILIB_RESOURCES_LIBRARY}
@@ -83,6 +87,10 @@ target_compile_options(${GUILIB_RESOURCES_LIBRARY} PUBLIC
 
 target_compile_options(${GUILIB_WIDGETS_LIBRARY} PUBLIC
     -g #-O2
+)
+
+add_custom_target(clean-all
+    COMMAND ${CMAKE_COMMAND} --target clean
 )
 
 file(COPY ${GUILIB_FILES} DESTINATION ${CMAKE_BINARY_DIR})
