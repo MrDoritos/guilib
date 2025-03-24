@@ -7,25 +7,6 @@
 #include "camera.h"
 #include "texture.h"
 
-struct material_t {
-    inline material_t(texture_t *diffuse, texture_t *specular, float gloss)
-    :diffuse(diffuse),specular(specular),shininess(gloss) { }
-    texture_t *diffuse, *specular;
-    float shininess;
-
-    inline void use(const int &unit = 0) const {
-        diffuse->use(unit);
-        specular->use(unit + 1);
-    }
-};
-
-struct light_t {
-    using v3 = glm::vec3;
-    inline light_t(v3 position, v3 ambient, v3 diffuse, v3 specular)
-    :position(position),ambient(ambient),diffuse(diffuse),specular(specular) { } 
-    v3 position, ambient, diffuse, specular;
-};
-
 struct shader_program_t {
     GLuint programId;
     std::vector<shader_t*> shaders;
@@ -57,6 +38,8 @@ struct shader_program_t {
         }
 
         GLint loc = glGetUniformLocation(programId, name);
+
+        assert(loc > -1 && "Resolved location < 0\n");
 
         if (save_locations && loc > -1) {
             resolved_locations[_conv] = loc;
@@ -123,10 +106,8 @@ struct shader_program_t {
     }
 
     virtual void use() {
-        //if (lastProgramId != programId) {
-            glUseProgram(programId);
-        //    lastProgramId = programId;
-        //}
+        assert(programId > 0 && "programId < 1\n");
+        glUseProgram(programId);
     }
 
     bool load();
