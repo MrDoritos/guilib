@@ -4,6 +4,14 @@
 #include "texture.h"
 
 struct vertex_t {
+    vertex_t(const glm::vec3 &vertex, const glm::vec3 &normal, const glm::vec2 &tex, const glm::vec3 &color) 
+        :vertex(vertex),
+         normal(normal),
+         tex(tex),
+         color(color) { }
+
+    vertex_t(){}
+
     glm::vec3 vertex, normal;
     glm::vec2 tex;
     glm::vec3 color;
