@@ -174,10 +174,10 @@ glm::vec4 ui_slider_t::get_slider_position() {
     
     //return glm::vec4(norm * size.x + pos.x - half_i_size.x, mp.y - half_i_size.y, i_size.x, i_size.y);
 
-    auto _pos = (norm * in[2]) + in[0];
     auto itemh = in[3] * slider_frac_h;
-    //auto itemw = in[2] * slider_frac_w;
     auto itemw = itemh * slider_frac_w;
+
+    auto _pos = (norm * (in[2] - itemw)) + in[0];
     auto itemwh = glm::vec2(itemw, itemh); //.1
 
     auto mp_y = (in[3] / 2.) + in[1];
@@ -185,7 +185,8 @@ glm::vec4 ui_slider_t::get_slider_position() {
 
     //printf("norm: %f, pos: %f, itemh: %f, mp_y: %f, value: %f, min: %f, max: %f, bound: %f, min: %f, max: %f\n", norm, pos, itemh, mp_y, value, min, max, bound, this->min, this->max);
 
-    return glm::vec4(_pos - itemhf.x, mp_y - itemhf.y, itemwh.x, itemwh.y);
+    //return glm::vec4(_pos - itemhf.x, mp_y - itemhf.y, itemwh.x, itemwh.y);
+    return glm::vec4(_pos, mp_y - itemhf.y, itemwh.x, itemwh.y);
 }
 
 bool ui_slider_t::onMouse(int button, int action, int mods) {
@@ -221,8 +222,13 @@ bool ui_slider_t::mesh() {
     auto size = get_size();
 
     glm::vec4 slider_bar_position = get_slider_position();
-    float slider_range_height = slider_bar_position[3] / 4.;
-    glm::vec4 slider_range_position = {pos.x,pos.y+mp.y-(slider_range_height/2),size.x,slider_range_height};
+
+    glm::vec4 slider_range_position = {
+        slider_bar_position[2] * 0.5 + pos.x,
+        slider_bar_position[3] * -0.125 + pos.y + mp.y,
+       -slider_bar_position[2] + size.x,
+        slider_bar_position[3] * 0.25
+    };
 
     glm::vec4 slider_range_color(0,0,0,.75); //75% alpha black
     glm::vec4 slider_bar_color(0,0,.5,1); //50% blue
