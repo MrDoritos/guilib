@@ -32,4 +32,6 @@ bool shader_t::load(const std::string &path) {
 bool shader_t::load() {
     assert(path.size() && "Path has no length\n");
     this->load(path);
+
+    return glsuccess;
 }

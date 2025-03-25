@@ -253,6 +253,7 @@ bool ui_slider_t::render() {
         return glsuccess;
 
     assert(textProgram && "textProgram null\n");
+    assert(vao && "vao invalid\n");
 
     textProgram->use();
     textProgram->set_f("mixFactor", 1.0);

@@ -20,6 +20,8 @@ struct ui_slider_t : public ui_element_t {
 
     ui_slider_t(GLFWwindow *window, shader_program_t *textProgram, texture_t *textTexture, glm::vec4 XYWH, ui_slider_v min, ui_slider_v max, ui_slider_v value, std::string title = std::string(), bool limit = true, callback_t value_change_callback = callback_t(), bool skip_text = false, bool hidden = false);
 
+    ui_slider_t() {}
+
     virtual void set_min(ui_slider_v min);
 
     virtual void set_max(ui_slider_v max);
@@ -46,3 +48,54 @@ struct ui_slider_t : public ui_element_t {
 
     bool render() override;
 };
+
+namespace gui {
+    template<typename T = ui_slider_t::ui_slider_v>
+    struct UISliderSocket {
+        struct ui_slider_t *slider;
+    
+        virtual void onChange(T value) {}
+        virtual void onReset() {}
+    };
+
+    template<typename T = ui_slider_t::ui_slider_v>
+    struct UISliderSocketPtr : public UISliderSocket<T> {
+        UISliderSocketPtr(T *T_ptr):T_ptr(T_ptr) { 
+            assert(T_ptr && "T_ptr is null\n");
+        }
+
+        T *T_ptr;
+
+        void onChange(T value) override {
+            *T_ptr = value;
+        }
+    };
+
+    template<typename T = ui_slider_t::ui_slider_v>
+    struct UISliderSocketable : public ui_slider_t {
+        using value_type = T;
+        using socket_type = UISliderSocket<value_type>;
+        using base_type = ui_slider_t;
+
+        socket_type socket;
+
+        UISliderSocketable(const base_type &base, const socket_type &&socket)
+                :base_type(base),socket(socket) { 
+            this->socket.slider = this;
+        }
+
+        void set_value(value_type v, bool callback = true) override {
+            socket.onChange(v);
+
+            base_type::set_value(v, callback);
+        }
+
+        bool reset() override {
+            socket.onReset();
+
+            return glsuccess;
+        }
+    };
+    
+};
+    
