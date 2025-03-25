@@ -15,6 +15,17 @@ struct UIShader : public shader_program_t {
     float mixFactor;
     glm::mat4 projection;
 
+    // Maintain constant aspect ratio
+    void set_buffer_size(int width, int height) {
+        auto aspect = float(width) / height;
+        projection = glm::translate(glm::mat4(1), glm::vec3(0,1-aspect,0));
+        projection = glm::scale(projection, glm::vec3(1, aspect, 1));
+    }
+
+    glm::mat4 get_projection() override {
+        return projection;
+    }
+
     void use() override {
         shader_program_t::use();
 

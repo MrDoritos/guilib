@@ -59,4 +59,32 @@ namespace util {
         if (ret > max) ret = max;
         return ret;
     }
+
+    // Don't really know what this would be called
+    template<typename V_T = float,
+             typename M_T = float,
+             int V_L = 2,
+             int M_L = 4,
+             typename vec = glm::vec<V_L, V_T>,
+             typename mat = glm::mat<M_L, M_L, M_T>>
+    constexpr inline vec project_screen(const vec &screen, const mat &projection) {
+        using m_vec = glm::vec<M_L, typename mat::value_type>;
+        using s_vec = glm::vec<V_L, typename m_vec::value_type>;
+        m_vec v;
+
+        constexpr auto count = std::min(V_L, M_L);
+        for (auto i = 0; i < count; i++)
+            v[i] = screen[i];
+
+        return vec(v / projection);
+    }
+
+    template<typename V_T = float,
+             typename M_T = float,
+             int M_L = 4,
+             typename vec = glm::vec<2, V_T>,
+             typename mat = glm::mat<M_L, M_L, M_T>>
+    constexpr inline vec project_screen(const V_T &x, const V_T &y, const mat &projection) {
+        return project_screen(vec(x, y), projection);
+    }
 }

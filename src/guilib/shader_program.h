@@ -89,6 +89,10 @@ struct shader_program_t {
         return glm::transpose(glm::inverse(glm::mat3(model)));
     }
 
+    virtual glm::mat4 get_projection() {
+        return glm::mat4(1.0f);
+    }
+
     virtual void set_camera(camera_t *camera, glm::mat4 model = glm::mat4(1.0f), std::string view_loc = "view", std::string model_loc = "model", std::string projection_loc = "projection", std::string norm_loc = "norm") {        
         auto view = camera->get_view_matrix();
         auto projection = camera->get_projection_matrix();
