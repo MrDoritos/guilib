@@ -108,3 +108,8 @@ void camera_t::keyboard(GLFWwindow *window, float deltaTime) {
         position -= up * deltaTime * movementFactor;
     }
 }
+
+void camera_t::onFramebuffer(GLFWwindow *window, int width, int height) {
+    screenWidth = width;
+    screenHeight = height;
+}

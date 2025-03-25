@@ -21,8 +21,6 @@ using hrc = std::chrono::high_resolution_clock;
 using tp = std::chrono::time_point<hrc>;
 using dur = std::chrono::duration<double>;
 
-extern glm::ivec4 initial_window;
-extern glm::ivec4 current_window;
 extern bool fullscreen;
 extern bool debug_mode;
 extern bool debug_pedantic;

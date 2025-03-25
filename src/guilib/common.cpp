@@ -1,7 +1,5 @@
 #include "common.h"
 
-glm::ivec4 initial_window(0);
-glm::ivec4 current_window(0);
 bool fullscreen = false;
 bool debug_mode = false;
 bool debug_pedantic = false;
