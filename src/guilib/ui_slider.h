@@ -71,10 +71,10 @@ namespace gui {
         }
     };
 
-    template<typename T = ui_slider_t::ui_slider_v>
+    template<typename T = ui_slider_t::ui_slider_v, typename Socket = UISliderSocket<T>>
     struct UISliderSocketable : public ui_slider_t {
         using value_type = T;
-        using socket_type = UISliderSocket<value_type>;
+        using socket_type = Socket;
         using base_type = ui_slider_t;
 
         socket_type socket;
