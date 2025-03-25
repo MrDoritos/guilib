@@ -4,8 +4,10 @@ GLuint shader_program_t::lastProgramId = -1;
 
 bool shader_program_t::load() {
     for (auto *shader : shaders) {
+        if (!shader->isLoaded())
+            shader->load();
+
         assert(shader->isLoaded() && "Shader not loaded\n");
-        assert(shader->shaderId != gluninitialized && "ShaderId not valid\n");
     }
 
     programId = glCreateProgram();
