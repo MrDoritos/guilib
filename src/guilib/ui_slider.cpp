@@ -133,6 +133,9 @@ std::string ui_slider_t::get_element_name() {
 bool ui_slider_t::onCursor(double x, double y) {
     if (hidden)
         return glsuccess;
+    
+    if (ui_element_t::onCursor(x, y))
+        return glcaught;
 
     if (cursor_drag) {
         bool shift = (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS);
@@ -155,7 +158,8 @@ bool ui_slider_t::onCursor(double x, double y) {
 
         return glcaught;
     }
-    return ui_element_t::onCursor(x,y);
+
+    return glsuccess;
 }
 
 glm::vec4 ui_slider_t::get_slider_position() {

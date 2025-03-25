@@ -8,11 +8,13 @@ struct ui_element_t {
     glm::vec4 XYWH;
     GLuint vao, vbo, vertexCount;
     bool modified, loaded, hidden;
+    double mouseX, mouseY;
+    int screenWidth, screenHeight;
     using callback_t = std::function<void()>;
     callback_t pre_render_callback;
 
     ui_element_t()
-    :modified(true),loaded(false),hidden(false),window(0) {}
+    :modified(true),loaded(false),hidden(false),window(0),mouseX(0),mouseY(0),screenWidth(0),screenHeight(0) {}
 
     ui_element_t(const ui_element_t &ui)
     :ui_element_t() {

@@ -40,12 +40,8 @@ bool ui_element_t::set_visible() {
 }
 
 glm::vec2 ui_element_t::get_cursor_position() {
-    double x, y;
-    int width, height;
-    glfwGetCursorPos(window, &x, &y);
-    glfwGetFramebufferSize(window, &width, &height);
-    auto unmapped = glm::vec2(x / width, y / height);
-    return unmapped * glm::vec2(2.) - glm::vec2(1.);
+    return glm::vec2((mouseX / screenWidth) * 2 - 1, 
+                     (mouseY / screenHeight) * 2 - 1);
 }
 
 glm::vec2 ui_element_t::get_cursor_relative() {
@@ -113,10 +109,16 @@ bool ui_element_t::onMouse(int button, int action, int mods) {
     return run_children(&ui_element_t::onMouse, button, action, mods);
 }
 
-bool ui_element_t::onFramebuffer(int width, int height) { 
+bool ui_element_t::onFramebuffer(int width, int height) {
+    screenWidth = width;
+    screenHeight = height;
+
     return run_children(&ui_element_t::onFramebuffer, width, height);
 }
 
 bool ui_element_t::onCursor(double x, double y) {
+    this->mouseX = x;
+    this->mouseY = y;
+
     return run_children(&ui_element_t::onCursor, x, y);
 }
