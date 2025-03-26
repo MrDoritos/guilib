@@ -5,12 +5,17 @@
 namespace gui {
 
 struct UIShader : public shader_program_t {
-    UIShader(const shader_program_t &base)
-            :shader_program_t(base),
-             mixFactor(0) { }
+    inline UIShader(const shader_program_t &base, const float &mixFactor, const glm::mat4 &projection)
+        :shader_program_t(base),
+         mixFactor(mixFactor),
+         projection(projection) { }
+
+    inline UIShader(const shader_program_t &base)
+        :UIShader(base, 0.0f, glm::mat4(1.0f)) { }
 
     template<typename ...T>
-    UIShader(T ...shaders):shader_program_t(shaders...),mixFactor(0),projection(1.0f) { }
+    inline UIShader(T ...shaders)
+        :UIShader(shader_program_t(shaders...)) { }
 
     float mixFactor;
     glm::mat4 projection;
