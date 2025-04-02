@@ -30,6 +30,13 @@ struct camera_t {
                                 this->near, this->far) * viewport_inversion;
     }
 
+    inline glm::mat4 get_billboard_matrix() const {
+        glm::mat4 mat(1.0);
+        mat = glm::rotate(mat, -glm::radians(this->yaw + 90), up);
+        mat = glm::rotate(mat, glm::radians(this->pitch + 90), glm::vec3(1, 0, 0));
+        return mat;
+    }
+
     inline constexpr bool isInteractive() const {
         return interactive;
     }

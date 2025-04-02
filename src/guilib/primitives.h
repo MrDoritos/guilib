@@ -23,18 +23,25 @@ namespace gui {
     }
 
     template<typename T>
-    int add_rectangle_3d(T *verts, const glm::mat4 &matrix, const float &radius, const glm::vec4 &UVWH, const glm::vec4 &color = glm::vec4(0)) {
+    int add_rectangle_3d(T *verts, const glm::mat4 &matrix, const glm::vec3 &scale, const glm::vec4 &UVWH, const glm::vec3 &color = glm::vec4(0)) {
         const glm::vec4 size[2] = {
-                { radius,  radius,  radius, 1.0f},
-                {-radius, -radius, -radius, 1.0f}};
+                glm::vec4(scale, 1.0f),
+                glm::vec4(-scale, 1.0f)};
 
         const glm::vec3 origin(matrix[3]),
-                        normal(glm::vec3(1) * matrix);
+                        normal(glm::vec4(1.0) * matrix);
 
+        /*
         const glm::vec3 a(matrix[2] * size[0]),
-                        b(matrix[2] * size[1]),
-                        c(matrix[0] * size[0]),
-                        d(matrix[0] * size[1]);
+                        b(matrix[0] * size[0]),
+                        c(matrix[0] * size[1]),
+                        d(matrix[2] * size[1]);
+        */
+
+        const glm::vec3 a(matrix * glm::vec4(0,0,0,0)),
+                        b(matrix * glm::vec4(0,1,0,0)),
+                        c(matrix * glm::vec4(1,0,0,0)),
+                        d(matrix * glm::vec4(1,1,0,0));
 
         const float &u = UVWH.x, &v = UVWH.y, &uw = UVWH.z, &vh = UVWH.w;
 
