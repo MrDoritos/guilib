@@ -87,4 +87,9 @@ namespace util {
     constexpr inline vec project_screen(const V_T &x, const V_T &y, const mat &projection) {
         return project_screen(vec(x, y), projection);
     }
+
+    template<typename T = float>
+    constexpr bool is_not_real(const T &v) {
+        return std::isinf(v) || std::isnan(v);
+    }
 }
