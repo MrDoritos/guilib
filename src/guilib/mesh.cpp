@@ -9,14 +9,6 @@ mesh_t::mesh_t():
         modified(0),
         position(0.0f) {
     clear();
-
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-}
-
-mesh_t::~mesh_t() {
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
 }
 
 void mesh_t::clear() {
@@ -26,7 +18,27 @@ void mesh_t::clear() {
     modified = false;
 }
 
+bool mesh_t::isLoaded() {
+    return vao > 0 && vbo > 0;
+}
+
+bool mesh_t::load() {
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    return !isLoaded();
+}
+
+bool mesh_t::unload() {
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+
+    return glsuccess;
+}
+
 void mesh_t::mesh() {
+    assert(isLoaded() && "Use load() to generate buffers before meshing\n");
+
     size_t coordSize = sizeof verticies[0].vertex;
     size_t normSize = sizeof verticies[0].normal;
     size_t texSize = sizeof verticies[0].tex;
@@ -70,6 +82,8 @@ void mesh_t::render() {
 
     if (vertexCount < 1)
         return;
+
+    assert(isLoaded() && "Use load() to generate buffers before rendering\n");
 
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);

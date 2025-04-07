@@ -26,14 +26,17 @@ struct mesh_t {
     
     mesh_t();
 
-    ~mesh_t();
-
     bool loadStl(const char *filename);
 
-    /*
-    Blender export Y forward, Z up. Triangulation, UV, normals
-    */
     bool loadObj(const char *filepath);
+
+    virtual bool isLoaded();
+
+    // Generate gl buffers
+    virtual bool load();
+
+    // Delete gl buffers
+    virtual bool unload();
 
     virtual void clear();
 
